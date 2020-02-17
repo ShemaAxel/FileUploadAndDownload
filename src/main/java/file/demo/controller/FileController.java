@@ -53,6 +53,7 @@ public class FileController {
 	@PostMapping("/uploadMultipleFiles")
 	public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
 
+		logger.info("Multiple file endpoint");
 		return Arrays.asList(files).stream().map(file -> uploadFile(file)).collect(Collectors.toList());
 
 	}
@@ -61,7 +62,7 @@ public class FileController {
 	public ResponseEntity<Resource> downloadFile(@PathVariable String fileId) {
 
 		DBFile dbFile = dbFileStorageService.getFile(fileId);
-
+		logger.info("Hitting the download endpoint");
 		return ResponseEntity.ok().contentType(MediaType.parseMediaType(dbFile.getFileType()))
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + dbFile.getFileName() + "\"")
 				.body(new ByteArrayResource(dbFile.getData()));

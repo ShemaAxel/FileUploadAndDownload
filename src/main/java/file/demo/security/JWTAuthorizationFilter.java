@@ -1,5 +1,7 @@
 package file.demo.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(JWTAuthorizationFilter.class);
+
 	public JWTAuthorizationFilter(AuthenticationManager authenticationManager) {
 		super(authenticationManager);
 	}
@@ -43,11 +47,16 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 	}
 
 	private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
+
 		String token = request.getHeader(HEADER_STRING);
+		LOGGER.info("Getting the Authentication JWT sent " + token);
+
 		if (token != null) {
 			// parse the token.
 			String user = JWT.require(Algorithm.HMAC512(SECRET.getBytes())).build()
 					.verify(token.replace(TOKEN_PREFIX, "")).getSubject();
+			
+			LOGGER.info("Parsing user from token " + user);
 
 			if (user != null) {
 				return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());

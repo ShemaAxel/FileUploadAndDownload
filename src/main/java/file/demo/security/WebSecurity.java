@@ -1,5 +1,7 @@
 package file.demo.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,18 +22,23 @@ import static file.demo.security.SecurityConstants.SIGN_UP_URL;;
 @EnableWebSecurity
 public class WebSecurity extends WebSecurityConfigurerAdapter {
 
+	private static final Logger log = LoggerFactory.getLogger(WebSecurity.class);
+
+	
 	private UserDetailsServiceImpl userDetailsService;
 
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	public WebSecurity(UserDetailsServiceImpl userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder) {
 		super();
+		log.info("Initializing the WebSecurity Constructor");
 		this.userDetailsService = userDetailsService;
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		log.info("HttpSecurity fx()");
 		http.cors().and().csrf().disable().authorizeRequests().antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll()
 				.anyRequest().authenticated().and().addFilter(new JWTAuthenticationFilter(authenticationManager()))
 				.addFilter(new JWTAuthorizationFilter(authenticationManager()))
