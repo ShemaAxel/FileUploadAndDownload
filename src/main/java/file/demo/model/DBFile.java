@@ -23,6 +23,8 @@ public class DBFile {
 
 	@Lob
 	private byte[] data;
+	
+	private String downloadUrl;
 
 	public DBFile() {
 		super();
@@ -65,5 +67,13 @@ public class DBFile {
 
 	public void setData(byte[] data) {
 		this.data = data;
+	}
+
+	public String getDownloadUrl() {
+		return downloadUrl;
+	}
+
+	public void setDownloadUrl(String downloadUrl) {
+		this.downloadUrl = downloadUrl;
 	}
 }
