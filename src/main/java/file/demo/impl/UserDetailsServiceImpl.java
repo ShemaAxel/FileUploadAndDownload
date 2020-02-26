@@ -44,7 +44,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 		// TODO Auto-generated method stub'
 	    ArrayList<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 	    authorities.add(new SimpleGrantedAuthority("USER"));
-
+	    authorities.add(new SimpleGrantedAuthority("ADMIN"));
 	    
 		return authorities;
 	}
